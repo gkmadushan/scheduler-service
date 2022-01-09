@@ -18,7 +18,7 @@ origins = [
     "http://localhost:3000",
 ]
 
-#middlewares
+# middlewares
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
@@ -27,21 +27,21 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-#user routes
+# user routes
 app.include_router(scheduler.router)
 
-#schedule tasks
+# schedule tasks
 database_uri = get_db_config()
 sessionmaker = FastAPISessionMaker(database_uri)
+
+
 @app.on_event("startup")
-@repeat_every(seconds=int(10))  # 1 minute
+@repeat_every(seconds=int(60))  # 1 minute
 async def schedule_task() -> None:
-    try:   
+    try:
         with sessionmaker.context_session() as db:
             task(db=db)
     except:
         f = open('./error.log', 'a')
         f.write(str(sys.exc_info())+'\n')
         f.close()
-
-

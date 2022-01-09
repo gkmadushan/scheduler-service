@@ -25,5 +25,7 @@ class Schedule(Base):
     frequency = Column(ForeignKey('frequency.id'), nullable=False)
     reference = Column(UUID, nullable=True)
     last_check = Column(DateTime, nullable=True)
+    action = Column(String(50), nullable=False)
+    action_params = Column(String(500), nullable=True)
 
     frequency1 = relationship('Frequency')
